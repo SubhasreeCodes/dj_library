@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-7r_-t-p3i#7^!3-p398ci9(+s!#)ed+66x8dtomzruzxd7#h6h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'dj-library-cwmk.onrender.com/'
+]
 
 
 # Application definition
