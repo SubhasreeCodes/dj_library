@@ -9,5 +9,5 @@ class Genre(models.Model):
         return self.name
 
     class Meta:
-        db_name = 'Genre'
+        db_table = 'Genre'
 
