@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from django.contrib.auth.admin import UserAdmin
 from backend.forms import CustomUserCreationForm, CustomUserChangeForm
-from backend.models import CustomUser, AuthorUser, MemberUser, AdminUser
+from backend.models import CustomUser, AuthorUser, MemberUser, AdminUser, Loan
 from django.utils.html import format_html
 
 from backend.models import Genre, Book, BookAuthor
@@ -71,3 +71,34 @@ class BookAdmin(admin.ModelAdmin):
     inlines = [BookAuthorInline]
     search_fields = ('title',)
     list_filter = ('category', 'publication_date')
+
+
+# Utility function to filter only members
+
+
+def get_member_queryset():
+    return CustomUser.objects.filter(groups__name='Member')
+
+
+# ---------- Inline for Loans in BookAdmin (Optional) ----------
+
+
+class LoanInline(admin.TabularInline):
+    model = Loan
+
+    extra = 1
+
+
+# ---------- Loan Admin ----------
+
+
+@admin.register(Loan)
+class LoanAdmin(admin.ModelAdmin):
+    list_display = ('book', 'member', 'loan_date', 'returned_date')
+    list_filter = ('loan_date', 'returned_date', 'book')
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "member":
+            kwargs["queryset"] = get_member_queryset()
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
