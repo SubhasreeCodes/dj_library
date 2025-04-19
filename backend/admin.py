@@ -33,11 +33,11 @@ class BaseCustomUserAdmin(UserAdmin):
         return format_html('<img src ="{}" width ="150" height="150" />'.format(obj.image.url))
     image_tag.short_description = 'Image'
 
-    @admin.register(AuthorUser)
-    class AuthorAdmin(BaseCustomUserAdmin):
+@admin.register(AuthorUser)
+class AuthorAdmin(BaseCustomUserAdmin):
 
-        def get_queryset(self, request):
-            return super().get_queryset(request).filter(groups__name='Author')
+    def get_queryset(self, request):
+        return super().get_queryset(request).filter(groups__name='Author')
 
 
 @admin.register(MemberUser)
@@ -61,6 +61,10 @@ class BookAuthorInline(admin.TabularInline):
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         if db_field.name == 'author':
+            # Filter only users in the "Author" group
+            kwargs["queryset"] = CustomUser.objects.filter(groups__name='Author')
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'publication_date', 'copies_owned')
