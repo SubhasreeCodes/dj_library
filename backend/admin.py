@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from django.contrib.auth.admin import UserAdmin
 from backend.forms import CustomUserCreationForm, CustomUserChangeForm
-from backend.models import CustomUser, AuthorUser, MemberUser, AdminUser, Loan
+from backend.models import CustomUser, AuthorUser, MemberUser, AdminUser, Loan, Fine
 from django.utils.html import format_html
 
 from backend.models import Genre, Book, BookAuthor
@@ -61,10 +61,6 @@ class BookAuthorInline(admin.TabularInline):
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         if db_field.name == 'author':
-            # Filter only users in the "Author" group
-            kwargs["queryset"] = CustomUser.objects.filter(groups__name='Author')
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'publication_date', 'copies_owned')
@@ -72,26 +68,16 @@ class BookAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('category', 'publication_date')
 
-
 # Utility function to filter only members
-
-
 def get_member_queryset():
     return CustomUser.objects.filter(groups__name='Member')
 
-
 # ---------- Inline for Loans in BookAdmin (Optional) ----------
-
-
 class LoanInline(admin.TabularInline):
     model = Loan
-
     extra = 1
 
-
 # ---------- Loan Admin ----------
-
-
 @admin.register(Loan)
 class LoanAdmin(admin.ModelAdmin):
     list_display = ('book', 'member', 'loan_date', 'returned_date')
@@ -100,5 +86,16 @@ class LoanAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "member":
             kwargs["queryset"] = get_member_queryset()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+
+# ---------- Fine Admin ----------
+@admin.register(Fine)
+class FineAdmin(admin.ModelAdmin):
+    list_display = ('member', 'loan', 'fine_date', 'fine_amount')
+    list_filter = ('fine_date',)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "member":
+            kwargs["queryset"] = get_member_queryset()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
