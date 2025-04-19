@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from django.contrib.auth.admin import UserAdmin
 from backend.forms import CustomUserCreationForm, CustomUserChangeForm
-from backend.models import CustomUser, AuthorUser, MemberUser, AdminUser, Loan, Fine
+from backend.models import CustomUser, AuthorUser, MemberUser, AdminUser, Loan, Fine, FinePayment
 from django.utils.html import format_html
 
 from backend.models import Genre, Book, BookAuthor
