@@ -98,4 +98,20 @@ class FineAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "member":
             kwargs["queryset"] = get_member_queryset()
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+# ---------- Fine Payment Admin ----------
+
+
+@admin.register(FinePayment)
+class FinePaymentAdmin(admin.ModelAdmin):
+    list_display = ('member', 'payment_date', 'payment_amount')
+
+    list_filter = ('payment_date',)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "member":
+            kwargs["queryset"] = get_member_queryset()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
