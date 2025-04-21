@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 from frontend.forms import RegisterForm, LoginForm
 
@@ -36,3 +36,9 @@ def member_login(request):
     else:
         form = LoginForm()
     return render(request, 'frontend/login.html', {'form': form})
+
+
+# Logout
+def member_logout(request):
+    logout(request)
+    return redirect('login')
