@@ -67,10 +67,14 @@ class BookAuthorInline(admin.TabularInline):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'publication_date', 'copies_owned')
+    list_display = ('title', 'category', 'publication_date', 'copies_owned', 'image_tag',)
     inlines = [BookAuthorInline]
     search_fields = ('title',)
     list_filter = ('category', 'publication_date')
+
+    def image_tag(self, obj):
+        return format_html('<img src = "{}" width = "150" height="150" />'.format(obj.cover_image.url))
+    image_tag.short_description = 'Image'
 
 # Utility function to filter only members
 def get_member_queryset():
