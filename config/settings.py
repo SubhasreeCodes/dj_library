@@ -47,10 +47,12 @@ INSTALLED_APPS = [
     'backend',
     'frontend',
 
+    # Add Crispy Forms with Bootstrap 5.
     "crispy_forms",
     "crispy_bootstrap5"
 ]
 
+# Set and allow Bootstrap 5 templates.
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
