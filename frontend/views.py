@@ -73,3 +73,10 @@ def loaned_books(request):
 def fines_view(request):
     fines = Fine.objects.filter(member=request.user)
     return render(request, 'frontend/fines.html', {'fines': fines})
+
+
+# View Reservations
+@login_required
+def reservations_view(request):
+    reservations = Reservation.objects.filter(member=request.user)
+    return render(request, 'frontend/reservations.html', {'reservations': reservations})
