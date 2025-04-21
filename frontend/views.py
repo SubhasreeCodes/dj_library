@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -27,7 +26,6 @@ def member_register(request):
         form = RegisterForm()
     return render(request, 'frontend/register.html', {'form': form})
 
-
 # Member Login
 def member_login(request):
     if request.method == 'POST':
@@ -50,10 +48,7 @@ def member_logout(request):
     logout(request)
     return redirect('login')
 
-
 # Dashboard (Optional)
-
-
 @login_required
 def member_dashboard(request):
     user = request.user
@@ -67,13 +62,11 @@ def member_dashboard(request):
     }
     return render(request, 'frontend/dashboard.html', context)
 
-
 # List of Loaned Books
 @login_required
 def loaned_books(request):
     loans = Loan.objects.filter(member=request.user)
     return render(request, 'frontend/loaned_books.html', {'loans': loans})
-
 
 # List of Fines
 @login_required
